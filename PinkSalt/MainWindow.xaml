@@ -122,8 +122,10 @@
         <StackPanel Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" Name="WelcomePanel">
             <TextBlock Text="🧂" FontSize="72" HorizontalAlignment="Center"/>
             <TextBlock Text="Welcome to Pink Salt" FontSize="24" HorizontalAlignment="Center" Margin="0,20,0,0"/>
-            <TextBlock Text="Create a new note to get started" HorizontalAlignment="Center" Foreground="Gray" Margin="0,5,0,10"/>
+            <TextBlock Text="Claudia Edition" FontSize="13" HorizontalAlignment="Center" Foreground="{StaticResource AccentPinkBrush}" Margin="0,4,0,0" FontStyle="Italic"/>
+            <TextBlock Text="Create a new note to get started" HorizontalAlignment="Center" Foreground="Gray" Margin="0,16,0,4"/>
             <TextBlock Text="Use [[Note Title]] to link notes" HorizontalAlignment="Center" Foreground="Gray" FontSize="12"/>
+            <TextBlock Text="by PocketPixel" HorizontalAlignment="Center" Foreground="{StaticResource MutedTextBrush}" FontSize="11" Margin="0,24,0,0"/>
         </StackPanel>
 
         <!-- RIGHT PANEL (graph / info) -->
