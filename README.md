@@ -1,4 +1,4 @@
-# Pink Salt – Claudia Edition
+# Pink Salt
 
 > **Author:** PocketPixel
 
