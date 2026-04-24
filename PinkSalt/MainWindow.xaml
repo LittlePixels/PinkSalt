@@ -1,12 +1,145 @@
 ﻿<Window x:Class="PinkSalt.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:PinkSalt"
-        mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        xmlns:avalonedit="http://icsharpcode.net/sharpdevelop/avalonedit"
+        Title="Pink Salt - Advanced Note Taking" Height="700" Width="1200"
+        Closing="Window_Closing" Background="{DynamicResource WindowBackgroundBrush}">
+
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="270"/>
+            <!-- left sidebar -->
+            <ColumnDefinition Width="*"/>
+            <!-- main editor -->
+            <ColumnDefinition Width="320"/>
+            <!-- right panel -->
+        </Grid.ColumnDefinitions>
+
+        <!-- LEFT SIDEBAR (Obsidian-like) -->
+        <Border Grid.Column="0" Background="{StaticResource WindowBackgroundBrush}"
+                BorderBrush="{StaticResource UiBorderBrush}" BorderThickness="0,0,1,0">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="72"/> <!-- header -->
+                    <RowDefinition Height="Auto"/> <!-- controls -->
+                    <RowDefinition Height="*"/> <!-- lists -->
+                </Grid.RowDefinitions>
+
+                <!-- header -->
+                <Border Grid.Row="0" Background="{StaticResource AccentPinkBrush}" Padding="14">
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" >
+                        <TextBlock Text="🧂" FontSize="20" Margin="0,0,8,0"/>
+                        <TextBlock Text="Pink Salt" FontSize="18" Foreground="White" FontWeight="Bold" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- quick actions -->
+                <StackPanel Grid.Row="1" Margin="12" Orientation="Vertical">
+                    <Button Name="NewNoteBtn" Content="+ New" Click="NewNote_Click" Width="120" Margin="0,0,0,8"/>
+                    <DockPanel Margin="0,6,0,0">
+                        <TextBox Name="SearchBox" Margin="0,0,6,0" Width="180" VerticalAlignment="Center" />
+                    </DockPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,6,0,0" HorizontalAlignment="Left">
+                        <Button Name="ShowGraphBtn" Content="Graph" Click="ShowGraph_Click" Width="70" Margin="0,0,6,0"/>
+                        <Button Name="BackupBtn" Content="Backup" Click="Backup_Click" Width="70" Margin="0,0,6,0"/>
+                        <Button Name="BackupToFolderBtn" Content="Export" Click="BackupToFolder_Click" Width="70"/>
+                    </StackPanel>
+                </StackPanel>
+
+                <!-- folders and notes lists -->
+                <DockPanel Grid.Row="2" Margin="8" LastChildFill="True">
+                    <TextBlock DockPanel.Dock="Top" Text="Folders" FontWeight="SemiBold" Foreground="{StaticResource MutedTextBrush}" Margin="6,6,6,4"/>
+                    <ListBox DockPanel.Dock="Top" Name="FolderList" Height="120" Margin="4,0,4,8" SelectionChanged="FolderList_SelectionChanged"/>
+
+                    <TextBlock DockPanel.Dock="Top" Text="Notes" FontWeight="SemiBold" Foreground="{StaticResource MutedTextBrush}" Margin="6,6,6,4"/>
+                    <ListBox Name="NotesList" Margin="4,0,4,8" SelectionChanged="NotesList_SelectionChanged" DisplayMemberPath="Title"/>
+                </DockPanel>
+            </Grid>
+        </Border>
+
+        <!-- MAIN EDITOR (center) -->
+        <Grid Grid.Column="1" Margin="14,12,14,12" Name="EditorPanel" Visibility="Collapsed">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/> <!-- toolbar -->
+                <RowDefinition Height="Auto"/> <!-- title -->
+                <RowDefinition Height="Auto"/> <!-- meta -->
+                <RowDefinition Height="*"/>    <!-- editor / preview -->
+            </Grid.RowDefinitions>
+
+            <!-- toolbar -->
+            <!-- Use WrapPanel so buttons can wrap to a second row instead of clipping at the right edge -->
+            <WrapPanel Grid.Row="0" HorizontalAlignment="Left">
+                <Button Name="SaveBtn" Content="Save" Click="SaveBtn_Click" Width="80" Margin="0,0,8,0"/>
+
+                <!-- inline formatting -->
+                <Button Name="BoldBtn" Content="B" Click="BoldBtn_Click" Width="40" Margin="0,0,4,0"/>
+                <Button Name="ItalicBtn" Content="I" Click="ItalicBtn_Click" Width="40" Margin="0,0,4,0"/>
+                <Button Name="CodeBtn" Content="Code" Click="CodeBtn_Click" Width="60" Margin="0,0,4,0"/>
+                <Button Name="LinkBtn" Content="[[Link]]" Click="LinkBtn_Click" Width="80" Margin="0,0,8,0"/>
+                <Button Name="InsertImageBtn" Content="🖼️ Image" Click="InsertImageBtn_Click" Width="90" Margin="0,0,8,0"/>
+
+                <!-- block formatting -->
+                <Button Name="HeadingBtn" Content="# H1" Click="HeadingBtn_Click" Width="60" Margin="0,0,4,0"/>
+                <Button Name="ListBtn" Content="• List" Click="ListBtn_Click" Width="70" Margin="0,0,8,0"/>
+
+                <Button Name="RenameBtn" Content="Rename" Click="RenameNote_Click" Width="80" Margin="0,0,8,0"/>
+                <Button Name="DeleteBtn" Content="Delete" Click="DeleteNote_Click" Width="80" Margin="0,0,0,0"/>
+            </WrapPanel>
+
+            <!-- title -->
+            <TextBox Name="TitleTextBox" Grid.Row="1" Margin="0,10,0,6" FontSize="22" FontWeight="Bold" BorderThickness="0,0,0,1"/>
+
+            <!-- meta: folder + tags -->
+            <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,6,0,12">
+                <StackPanel Orientation="Horizontal" Margin="0,0,12,0">
+                    <TextBlock Text="Folder:" VerticalAlignment="Center" Margin="0,0,6,0" Foreground="{StaticResource MutedTextBrush}"/>
+                    <ComboBox Name="FolderCombo" Width="160" IsEditable="True"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Tags:" VerticalAlignment="Center" Margin="6,0,6,0" Foreground="{StaticResource MutedTextBrush}"/>
+                    <TextBox Name="TagsTextBox" Width="240"/>
+                </StackPanel>
+            </StackPanel>
+
+            <!-- editor + preview split -->
+            <Grid Grid.Row="3" Margin="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <avalonedit:TextEditor Name="MarkdownEditor"
+                                       Grid.Column="0"
+                                       FontFamily="Consolas"
+                                       FontSize="14"
+                                       ShowLineNumbers="True"/>
+                <WebBrowser x:Name="PreviewBrowser"
+                            Grid.Column="1"
+                            Margin="10,0,0,0"/>
+            </Grid>
+        </Grid>
+
+        <!-- WELCOME PANEL (center) -->
+        <StackPanel Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" Name="WelcomePanel">
+            <TextBlock Text="🧂" FontSize="72" HorizontalAlignment="Center"/>
+            <TextBlock Text="Welcome to Pink Salt" FontSize="24" HorizontalAlignment="Center" Margin="0,20,0,0"/>
+            <TextBlock Text="Create a new note to get started" HorizontalAlignment="Center" Foreground="Gray" Margin="0,5,0,10"/>
+            <TextBlock Text="Use [[Note Title]] to link notes" HorizontalAlignment="Center" Foreground="Gray" FontSize="12"/>
+        </StackPanel>
+
+        <!-- RIGHT PANEL (graph / info) -->
+        <Border Grid.Column="2" Name="GraphPanel" Background="{StaticResource WindowBackgroundBrush}" BorderBrush="{StaticResource UiBorderBrush}" BorderThickness="1,0,0,0" Visibility="Collapsed" Padding="8">
+            <DockPanel>
+                <TextBlock DockPanel.Dock="Top" Text="📊 Note Graph" FontSize="16" FontWeight="Bold" Margin="8" HorizontalAlignment="Center"/>
+                <Canvas Name="GraphCanvas" Background="{StaticResource PinkLightBrush}" SizeChanged="GraphCanvas_SizeChanged"/>
+            </DockPanel>
+        </Border>
 
     </Grid>
 </Window>
+
+<!--REQUIRED NuGet PACKAGES:
+- Install-Package AvalonEdit
+- Install-Package Markdig
+
+Add this namespace to your project references.
+-->

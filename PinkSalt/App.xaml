@@ -4,6 +4,108 @@
              xmlns:local="clr-namespace:PinkSalt"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <ResourceDictionary>
+
+            <!-- Palette: only pinks and white -->
+            <SolidColorBrush x:Key="PinkLightBrush" Color="#FFFFF5FA"/>
+            <SolidColorBrush x:Key="AccentPinkBrush" Color="#FFFFB6C9"/>
+            <SolidColorBrush x:Key="AccentPinkDarkBrush" Color="#FFFF8FB0"/>
+            <SolidColorBrush x:Key="UiBorderBrush" Color="#FFFFD9E6"/>
+            <SolidColorBrush x:Key="WindowBackgroundBrush" Color="#FFFFFFFF"/>
+            <SolidColorBrush x:Key="MutedTextBrush" Color="#FFFF8FB0"/>
+
+            <!-- Global font -->
+            <FontFamily x:Key="AppFont">Segoe UI</FontFamily>
+
+            <!-- Button style -->
+            <Style TargetType="Button">
+                <Setter Property="FontFamily" Value="{StaticResource AppFont}"/>
+                <Setter Property="Padding" Value="8,6"/>
+                <Setter Property="Margin" Value="0"/>
+                <Setter Property="Background" Value="{StaticResource AccentPinkBrush}"/>
+                <Setter Property="Foreground" Value="White"/>
+                <Setter Property="BorderBrush" Value="{StaticResource UiBorderBrush}"/>
+                <Setter Property="BorderThickness" Value="0"/>
+                <Setter Property="Cursor" Value="Hand"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="{TemplateBinding Background}"
+                                    CornerRadius="6"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Margin="6,2"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Background" Value="{StaticResource AccentPinkDarkBrush}"/>
+                    </Trigger>
+                    <Trigger Property="IsPressed" Value="True">
+                        <Setter Property="Opacity" Value="0.9"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+
+            <!-- TextBox style (search / inputs) -->
+            <Style TargetType="TextBox">
+                <Setter Property="FontFamily" Value="{StaticResource AppFont}"/>
+                <Setter Property="Padding" Value="8,6"/>
+                <Setter Property="Background" Value="#FFFFFFFF"/>
+                <Setter Property="BorderBrush" Value="{StaticResource UiBorderBrush}"/>
+                <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                <Setter Property="Foreground" Value="#FFFF4B7F"/>
+                <Setter Property="VerticalContentAlignment" Value="Center"/>
+            </Style>
+
+            <!-- ListBox style for notes & folders -->
+            <Style TargetType="ListBox">
+                <Setter Property="FontFamily" Value="{StaticResource AppFont}"/>
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="BorderThickness" Value="0"/>
+            </Style>
+
+            <Style TargetType="ListBoxItem">
+                <Setter Property="Padding" Value="10,8"/>
+                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                <Setter Property="VerticalContentAlignment" Value="Center"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="ListBoxItem">
+                            <Border x:Name="Bd" Background="Transparent">
+                                <Grid>
+                                    <Rectangle x:Name="SelectionBar" Width="4" HorizontalAlignment="Left" Fill="Transparent" RadiusX="2" RadiusY="2"/>
+                                    <ContentPresenter Margin="12,0,0,0" VerticalAlignment="Center"/>
+                                </Grid>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter TargetName="Bd" Property="Background" Value="#FFFFF0F6"/>
+                                    <Setter TargetName="SelectionBar" Property="Fill" Value="{StaticResource AccentPinkBrush}"/>
+                                </Trigger>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="Bd" Property="Background" Value="#FFFFFAFD"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <!-- ComboBox -->
+            <Style TargetType="ComboBox">
+                <Setter Property="FontFamily" Value="{StaticResource AppFont}"/>
+                <Setter Property="Padding" Value="6"/>
+            </Style>
+
+            <!-- Window-level default background -->
+            <Style TargetType="Window">
+                <Setter Property="Background" Value="{StaticResource WindowBackgroundBrush}"/>
+                <Setter Property="FontFamily" Value="{StaticResource AppFont}"/>
+            </Style>
+
+        </ResourceDictionary>
     </Application.Resources>
 </Application>
