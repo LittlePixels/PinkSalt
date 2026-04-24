@@ -1,6 +1,6 @@
 # Pink Salt – Claudia Edition
 
-Pink Salt is a cozy, pink-and-white, Obsidian‑inspired note‑taking app for Windows. This "Claudia Edition" adds rich Markdown editing, note graph visualization, wiki‑style links, and a full soft pink theme.
+Pink Salt is a cozy, pink-and-white, Obsidian‑inspired note‑taking app for Windows. This "Open Source" adds rich Markdown editing, note graph visualization, wiki‑style links, and a full soft pink theme.
 
 ---
 
