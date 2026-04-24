@@ -200,4 +200,4 @@ PinkSalt/
 
 ## License
 
-This project is based on Pink Salt and remains under the original license included in `LICENSE.txt`.
+This project is based on Pink Salt and remains under the original license included in `LICENSE.txt`. Created by PocketPixels.
